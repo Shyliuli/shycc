@@ -56,7 +56,8 @@ void output(const std::string &filename) {
     // Close the file
     file.close();
 }
-
+//还没学明白文件操作
+//交给chatgpt了
 
 
 
