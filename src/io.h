@@ -7,7 +7,7 @@
 #include <vector>
 #include <iomanip>
 
-extern std::vector<unsigned short>
+extern std::vector<unsigned short> 
     address; // 外部声明address向量，用于存储内存地址
 
 struct index_s
@@ -31,18 +31,36 @@ void read_code (std::string file_name, index_s indexs);
 inline void output(const std::string &filename);
 //输出”主函数“
 
-inline void output(const std::string &filename){
-  std::ofstream file(filename);
-  if (!file.is_open()){
-      std::cerr << "Failed to open file: " << filename << std::endl;
-      return;
-  }
-  for (auto &instruction : address) {
-      file << std::hex << std::setw(4) << std::setfill('0') << instruction << " ";
+void output(const std::string &filename) {
 
+    // Open a file in binary mode
+    std::ofstream file(filename, std::ios::binary);
+    
+    // Check if the file is open
+    if (!file.is_open()) {
+        std::cerr << "Error opening file: " << filename << std::endl;
+        return;
+    }
+
+    // Iterate over the vector and write each element to the file
+    for (unsigned short val : address) {
+        // Write the binary representation of 'val' to the file
+        file.write(reinterpret_cast<const char*>(&val), sizeof(val));
+    }
+
+    // Check for write errors
+    if (!file) {
+        std::cerr << "Error writing to file: " << filename << std::endl;
+    }
+
+    // Close the file
+    file.close();
 }
 
-}
+
+
+
+
 
 
 inline void

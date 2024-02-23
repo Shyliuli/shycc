@@ -5,7 +5,7 @@
 #include<vector>
 #include<iostream>
 #define MAX 0xFFFF
-#define CODE_FROM 0x50
+#define CODE_FROM 0x2000
 // 内建函数编号从0x10开始
 #define ADDA_FUNC 0x10
 #define ADDN_FUNC 0x11
