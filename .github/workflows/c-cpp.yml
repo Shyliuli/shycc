@@ -14,10 +14,9 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: make
-steps:
-- uses: actions/download-artifact@v4
-  with:
-    name: shycc
-- name: Display structure of downloaded files
-  run: ls -R
+    - uses: actions/download-artifact@v4
+      with:
+        name: shycc
+    - name: Display structure of downloaded files
+      run: ls -R
           
