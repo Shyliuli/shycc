@@ -1,13 +1,13 @@
 #include "memorylist.h" // 包含必要的头文件
 #include <fstream>
+#include <iomanip>
 #include <iostream>
 #include <sstream>
 #include <string>
 #include <unordered_map>
 #include <vector>
-#include <iomanip>
 
-extern std::vector<unsigned short> 
+extern std::vector<unsigned short>
     address; // 外部声明address向量，用于存储内存地址
 
 struct index_s
@@ -19,8 +19,8 @@ struct index_s
 }; // 索引结构体，用于存储数据和代码的起始和结束索引
 
 // 此头文件的函数：
-inline void
-read_file (const std::string &filename); // 此头文件的读取“主函数”，调用这个即可
+inline void read_file (
+    const std::string &filename); // 此头文件的读取“主函数”，调用这个即可
 unsigned short ascii_to_hex (char c);
 unsigned short string_to_hex (const std::string &str);
 std::vector<std::string> readaline (const std::string &filename,
@@ -28,41 +28,41 @@ std::vector<std::string> readaline (const std::string &filename,
 index_s add_indexs (std::string file_name);
 void read_data (std::string file_name, index_s indexs);
 void read_code (std::string file_name, index_s indexs);
-inline void output(const std::string &filename);
-//输出”主函数“
+inline void output (const std::string &filename);
+// 输出”主函数“
 
-void output(const std::string &filename) {
+void
+output (const std::string &filename)
+{
 
-    // Open a file in binary mode
-    std::ofstream file(filename, std::ios::binary);
-    
-    // Check if the file is open
-    if (!file.is_open()) {
-        std::cerr << "Error opening file: " << filename << std::endl;
-        return;
+  // Open a file in binary mode
+  std::ofstream file (filename, std::ios::binary);
+
+  // Check if the file is open
+  if (!file.is_open ())
+    {
+      std::cerr << "Error opening file: " << filename << std::endl;
+      return;
     }
 
-    // Iterate over the vector and write each element to the file
-    for (unsigned short val : address) {
-        // Write the binary representation of 'val' to the file
-        file.write(reinterpret_cast<const char*>(&val), sizeof(val));
+  // Iterate over the vector and write each element to the file
+  for (unsigned short val : address)
+    {
+      // Write the binary representation of 'val' to the file
+      file.write (reinterpret_cast<const char *> (&val), sizeof (val));
     }
 
-    // Check for write errors
-    if (!file) {
-        std::cerr << "Error writing to file: " << filename << std::endl;
+  // Check for write errors
+  if (!file)
+    {
+      std::cerr << "Error writing to file: " << filename << std::endl;
     }
 
-    // Close the file
-    file.close();
+  // Close the file
+  file.close ();
 }
-//还没学明白文件操作
-//交给chatgpt了
-
-
-
-
-
+// 还没学明白文件操作
+// 交给chatgpt了
 
 inline void
 read_file (const std::string &filename)
@@ -71,7 +71,6 @@ read_file (const std::string &filename)
   read_data (filename, index);
   read_code (filename, index);
 }
-
 
 // 命令和寄存器到16进制的映射
 std::unordered_map<std::string, unsigned short> command_map = {
@@ -116,7 +115,7 @@ string_to_hex (const std::string &str)
 inline std::vector<std::string>
 readaline (std::string &filename, unsigned short index)
 {
-  index=index+1; // 行号从1开始，数组下标从0开始
+  index = index + 1;             // 行号从1开始，数组下标从0开始
   std::ifstream file (filename); // 读取一行
   std::vector<std::string> result;
 
@@ -150,7 +149,7 @@ add_indexs (std::string file_name)
   index_s added_indexs;
   for (unsigned short i = 0; i < MAX; i++)
     {
-      std::vector<std::string> aline= readaline (file_name, i);
+      std::vector<std::string> aline = readaline (file_name, i);
       if (aline[0][0] == '_')
         {
           if (aline[0] == "_datastart_")
@@ -221,7 +220,7 @@ read_code (std::string file_name, index_s indexs)
 
   if (file.is_open ())
     {
-      for (int i = indexs.index_of_code_start +1 ;
+      for (int i = indexs.index_of_code_start + 1;
            i < indexs.index_of_code_end; i++)
         {
           std::vector<std::string> aline
@@ -251,11 +250,15 @@ read_code (std::string file_name, index_s indexs)
                   if (register_map.find (aline[1]) != register_map.end ())
                     {
                       address[index + 1] = register_map[aline[1]];
-                    }
+                    } // 处理寄存器
                   else if (aline[1].front () == '.')
                     {
                       address[index + 1] = flag_map[aline[1].substr (1)];
-                    }
+                    } // 处理label
+                  else if (aline[1].front () == '"')
+                    {
+                      address[index + 1] = ascii_to_hex (aline[1][1]);
+                    } // 处理字符
                   else
                     {
                       address[index + 1] = string_to_hex (aline[1]);
@@ -276,6 +279,10 @@ read_code (std::string file_name, index_s indexs)
                       else if (aline[2].front () == '.')
                         {
                           address[index + 3] = flag_map[aline[2].substr (1)];
+                        }
+                      else if (aline[2].front () == '"')
+                        {
+                          address[index + 3] = ascii_to_hex (aline[2][1]);
                         }
                       else
                         {
