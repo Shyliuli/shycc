@@ -17,7 +17,7 @@ jobs:
       run: make
     - name: Download a Build Artifact
   uses: actions/download-artifact@v4.1.2
-  with:shycc
+  with:
     # Name of the artifact to download. If unspecified, all artifacts for the run are downloaded.
     name: # optional
     # Destination path. Supports basic tilde expansion. Defaults to $GITHUB_WORKSPACE
