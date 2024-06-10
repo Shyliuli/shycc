@@ -14,6 +14,6 @@ outnasc "o"
 outnasc 0x20
 outaasc 0x0060 
 outaasc 0x0061 
-outaasc 0x0062 
+outaasc 0x0062 //For testing purposes, this unusual output method is used.
 outn 0x7B
 _codeend_

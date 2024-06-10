@@ -190,6 +190,9 @@ read_data (std::string file_name, index_s indexs)
                   = string_to_hex (aline[0]); // 将地址转换为16进制
               for (size_t j = 1; j < aline.size (); j++)
                 {
+                  if (aline[j].find ("//") == 0){
+                    break;//处理注释
+                  }
                   if (aline[j].find ("0x") == 0)
                     {
                       // 如果是以0x开头的字符串，将其转换为16进制数存储
@@ -272,6 +275,10 @@ read_code (std::string file_name, index_s indexs)
                     }
                   if (aline.size () > 2)
                     {
+                       if (aline[2].find ("//") == 0){
+                    break;//处理注释
+                  }
+
                       if (register_map.find (aline[2]) != register_map.end ())
                         {
                           address[index + 3] = register_map[aline[2]];
