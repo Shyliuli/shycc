@@ -76,7 +76,83 @@ void load_data(FILE *fp)
 }
 void load_command(FILE *fp)
 {
-    //TODO
+    uint16_t line = 1;
+    uint16_t pc = 0;
+    while(1) {
+        char ** aline= read_a_line(fp, line);
+        line++;
+        if(aline == NULL || aline[0]==NULL){
+            printf("Error: Unable to read line %d\n", line);
+            assert(0);
+        }
+        if(type_is(aline[0])==CODESTART){
+            break;
+        }
+    }
+    while(1) {
+        char ** aline= read_a_line(fp, line);
+        line++;
+        if(aline == NULL || aline[0]==NULL){
+            printf("Error: Unable to read line %d\n", line);
+            assert(0);
+        }
+        if(type_is(aline[0])==CODEEND){
+            break;
+        }
+        if(type_is(aline[0])==LABEL){
+            label_add(aline[0], pc);
+            continue;
+        }
+        if(type_is(aline[0])==COMMAND){
+            mem_write(pc+PROGRAM_START, command_2_addr(aline[0]));
+          if(aline[1]!=NULL){
+                if(type_is(aline[1])==LABEL){
+                    mem_write(pc+PROGRAM_START+1, label_2_addr(aline[1]));
+                }
+                if(type_is(aline[1])==NUM){
+                    int num;
+                    sscanf(aline[1], "%d", &num);
+                    mem_write(pc+PROGRAM_START+1, num);
+                }
+                if(type_is(aline[1])==REG){
+                    mem_write(pc+PROGRAM_START+1, reg_2_addr(aline[1]));
+                }
+                if(type_is(aline[1])==HEX){
+                    int num;
+                    sscanf(aline[1], "%x", &num);
+                    mem_write(pc+PROGRAM_START+1, num);
+                }
+                if(aline[2]!=NULL){
+                    if(type_is(aline[2])==LABEL){
+                        mem_write(pc+PROGRAM_START+2, label_2_addr(aline[2]
+                    }
+                    if(type_is(aline[2])==NUM){
+                        int num;
+                        sscanf(aline[2], "%d", &num);
+                        mem_write(pc+PROGRAM_START+2, num);
+                    }
+                    if(type_is(aline[2])==REG){
+                        mem_write(pc+PROGRAM_START+2, reg_2_addr(aline[2]));
+                    }
+                    if(type_is(aline[2])==HEX){
+                        int num;
+                        sscanf(aline[2], "%x", &num);
+                        mem_write(pc+PROGRAM_START+2, num);
+                    }
+                }
+                else{
+                    mem_write(pc+PROGRAM_START+2, 0);
+                }
+          }
+          else{
+            mem_write(pc+PROGRAM_START+1, 0);
+            mem_write(pc+PROGRAM_START+2, 0);
+          }  
+        }
+
+    pc+=3;
+    }
+
 }
 char** read_a_line(FILE *fp, uint16_t line) {
     if (line == 0 || !fp) return NULL;
