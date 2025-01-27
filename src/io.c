@@ -134,7 +134,7 @@ void load_data(FILE *fp) {
         if (type_is(aline[0]) == DATAEND) {
             free_line(aline);
             break;
-        }
+        } 
 
         if (!aline[0] || !aline[1]) {
             fprintf(stderr, "Invalid data format at line %d\n", line-1);
