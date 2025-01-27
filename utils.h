@@ -16,6 +16,6 @@ enum str_type{
     DATAEND,
     CODESTART,
     CODEEND,
-}
+};
 
 #endif //UTILS_H
