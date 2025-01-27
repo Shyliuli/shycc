@@ -48,13 +48,30 @@ void load_data(FILE *fp)
             printf("Error: Unable to read line %d\n", line);
             assert(0);
         }
-        uint16_t addr=0;
-        sscanf(aline[0], "%x", &addr);
-        uint16_t val=0;
-
         if(type_is(aline[0])==DATAEND){
             break;
         }
+        uint16_t addr=0;
+        sscanf(aline[0], "%x", &addr);
+        uint16_t val=0;
+        switch (type_is(aline[1]))
+        {
+        case NUM:
+            sscanf(aline[1], "%d", &val);
+            mem_write(addr, val);
+            break;
+        case HEX:
+            sscanf(aline[1], "%x", &val);
+            mem_write(addr, val);
+            break;
+        default:
+            int len =strlen(aline[1]);
+            for(int i=0; i<len; i++){
+                mem_write(addr+i, aline[1][i]);
+            }
+            break;
+        }
+
     }
 }
 void load_command(FILE *fp)
