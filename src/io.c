@@ -16,80 +16,51 @@ void print_version()
 // 定义一个函数，用于将程序加载到内存中
 void load_program_2_mem(char* filename)
 {
-    FILE *fp = fopen(filename, "r");
-    if (!fp) {
-        printf("Error: cannot open file %s\n", filename);
-        assert(0);
-    }
-    while(1){//读取文件
-    uint16_t i = 1;//行号
-    uint16_t program_addr_now = 0;
-    //和i大体一致，但是当遇到label的时候，program_addr_now不变
-    char ** aline = read_a_line(fp, i);
-    if(aline == NULL){
-        break;//读取完文件
-    }
-
-    for(int j = 0; j < 4; j++){
-        if(aline[j] != NULL){
-            if(j == 0){
-                //command or label
-                if(is_label(aline[j])){
-                    //label
-                    label_addr(aline[j],program_addr_now);
-                    program_addr_now--;//跳过这一行
-                    break;
-                }
-                else{
-                    //command
-                    int success = 0;
-                    uint16_t command = str_2_command(aline[j],&success);
-                    if(success == 0){
-                        printf("Error: invalid command %s\n at line %d", aline[j],i);
-                        assert(0);
-                    }
-                    else{
-                        //处理command
-                        mem_write(PROGRAM_START+program_addr_now*3,command);
-                    }
-                }
-            }
-            else{
-                //参数
-                if(is_reg(aline[j])){
-                    //参数是寄存器
-                    uint16_t reg = str_2_reg(aline[j]);
-                    mem_write(PROGRAM_START+program_addr_now*3+1,reg);
-                }
-                else if(is_label(aline[j])){
-                    //参数是label
-                    uint16_t label_addr = str_2_label(aline[j]);
-                    mem_write(PROGRAM_START+program_addr_now*3+1,label_addr);
-
-                }
-                else if(is_num(aline[j])){
-                    //参数是数字
-                    uint16_t num = str_2_num(aline[j]);
-                    mem_write(PROGRAM_START+program_addr_now*3+1,num);
-                }
-                else{
-                    printf("Error: invalid args %s\n,at line %d\n", aline[j],i);
-                    assert(0);
-                }
-            }
-        }
-
-    }
-    i++;
-    program_addr_now++;
-    }
-  
-
+  FILE *fp = fopen(filename, "r");
+  if (!fp) {
+    printf("Error: Unable to open file %s\n", filename);
+    exit(1);
+  }
+  load_data(fp);
+  load_command(fp);
   fclose(fp);
 }
 
 // 读取文件流的某一行内容
+void load_data(FILE *fp)
+{
+    int line = 1;
+    while(1) {
+        char ** aline= read_a_line(fp, line);
+        line++;
+        if(aline == NULL || aline[0]==NULL){
+            printf("Error: Unable to read line %d\n", line);
+            assert(0);
+        }
+        if(type_is(aline[0])==DATASTART){
+            break;
+        }
+    }//找到数据开始
+    while(1) {
+        char ** aline= read_a_line(fp, line);
+        line++;
+        if(aline == NULL || aline[0]==NULL || aline[1]==NULL){
+            printf("Error: Unable to read line %d\n", line);
+            assert(0);
+        }
+        uint16_t addr=0;
+        sscanf(aline[0], "%x", &addr);
+        uint16_t val=0;
 
+        if(type_is(aline[0])==DATAEND){
+            break;
+        }
+    }
+}
+void load_command(FILE *fp)
+{
+    //TODO
+}
 char** read_a_line(FILE *fp, uint16_t line) {
     if (line == 0 || !fp) return NULL;
 

@@ -5,6 +5,7 @@
 #include "version.h"
 #include <assert.h>
 #include "mem.h"
+#include "utils.h"
 void load_program_2_mem(char *filename);
 void print_help();
 void print_version();
