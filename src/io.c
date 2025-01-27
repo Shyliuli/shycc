@@ -124,7 +124,7 @@ void load_command(FILE *fp)
                 }
                 if(aline[2]!=NULL){
                     if(type_is(aline[2])==LABEL){
-                        mem_write(pc+PROGRAM_START+2, label_2_addr(aline[2]
+                        mem_write(pc+PROGRAM_START+2, label_2_addr(aline[2]));
                     }
                     if(type_is(aline[2])==NUM){
                         int num;
