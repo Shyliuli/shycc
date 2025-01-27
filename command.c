@@ -1,5 +1,5 @@
 #include "command.h"
-const char* find_command_by_address(uint8_t hex_address) {
+const char* addr_2_command(uint8_t hex_address) {
     for (int i = 0; i < COMMAND_TABLE_SIZE; i++) {
         if (command_table[i].hex_address == hex_address) {
             return command_table[i].command_name;
@@ -9,7 +9,7 @@ const char* find_command_by_address(uint8_t hex_address) {
 }
 
 // 通过命令名称查找地址
-uint16_t find_address_by_command(const char* command_name) {
+uint16_t command_2_addr(const char* command_name) {
     for (int i = 0; i < COMMAND_TABLE_SIZE; i++) {
         if (strcmp(command_table[i].command_name, command_name) == 0) {
             return command_table[i].hex_address;

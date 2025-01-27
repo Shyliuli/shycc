@@ -56,11 +56,11 @@ Command command_table[] = {
 
 // 命令表的大小
 #define COMMAND_TABLE_SIZE (sizeof(command_table) / sizeof(Command))
-
+#define PROGRAM_START 0x2000
 // 通过地址查找命令名称
-const char* find_command_by_address(uint8_t hex_address);
+const char* addr_2_command(uint8_t hex_address);
 
 // 通过命令名称查找地址
-uint16_t find_address_by_command(const char* command_name);
+uint16_t command_2_addr(const char* command_name);
 
 #endif

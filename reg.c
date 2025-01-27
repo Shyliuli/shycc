@@ -1,5 +1,5 @@
 #include "reg.h"
-uint16_t find_addr_by_reg(const char* name){
+uint16_t reg_2_addr(const char* name){
     for (int i = 0; i < REGISTER_COUNT; i++) {
         if (strcmp(register_names[i], name) == 0) {
             return i;
@@ -9,7 +9,7 @@ uint16_t find_addr_by_reg(const char* name){
 }
 
 // 根据寄存器索引查找名称
-const char* find_reg_by_addr(int index){
+const char* addr_2_reg(int index){
     if (index >= 0 && index < REGISTER_COUNT) {
         return register_names[index];
     }

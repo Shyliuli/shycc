@@ -1,6 +1,5 @@
 #ifndef MEM_H
 #define MEM_H
-#define PROGRAM_START 0x2000
 #define MEM_SIZE 0xFFFF
 #include <stdint.h>
 uint16_t mem[MEM_SIZE]; // 1M "16-bit" memory

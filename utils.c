@@ -13,10 +13,10 @@ str_t type_is(char *strval){
     if(isdigit(strval[0])){
         return NUM;
     }
-    if(find_address_by_command(strval) != 0xFF){
+    if(command_2_addr(strval) != 0xFF){
         return COMMAND;
     }
-    if(find_addr_by_reg(strval) != 0xFF){
+    if(reg_2_addr(strval) != 0xFF){
         return REG;
     }
 
