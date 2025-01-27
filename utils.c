@@ -25,10 +25,10 @@ str_t type_is(char *strval){
         assert(0);
     }
     if(strcmp(strval, "_datastart_") == 0){
-        return DATA_START;
+        return DATASTART;
     }
     if(strcmp(strval, "_dataend_") == 0){
-        return DATA_END;
+        return DATAEND;
     }
     if(strcmp(strval, "_codestart_") == 0){
         return CODESTART;
